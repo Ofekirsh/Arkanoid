@@ -1,0 +1,51 @@
+<project name="ArkanoidGame" default="run" basedir=".">
+    
+    <!-- Set up properties -->
+    <property name="src.dir"     value="src"/>
+    <property name="build.dir"   value="build"/>
+    <property name="lib.dir"     value="lib"/>
+    <property name="dist.dir"    value="dist"/>
+    <property name="main.class"  value="game.Game"/>
+
+    <!-- Create build directories if they don't exist -->
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <!-- Compile the Java source files -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
+            <classpath>
+                <pathelement path="${lib.dir}/biuoop-1.4.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- Run the program -->
+    <target name="run" depends="compile">
+        <java classname="${main.class}" fork="true">
+            <classpath>
+                <pathelement path="${build.dir}"/>
+                <pathelement path="${lib.dir}/biuoop-1.4.jar"/>
+            </classpath>
+        </java>
+    </target>
+
+    <!-- Create a runnable JAR file -->
+    <target name="export" depends="compile">
+        <jar destfile="${dist.dir}/ArkanoidGame.jar" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+                <attribute name="Class-Path" value="lib/biuoop-1.4.jar"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- Clean the build and dist directories -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+</project>
